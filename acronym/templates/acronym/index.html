@@ -1,0 +1,24 @@
+{% extends "acronym/base.html" %}
+
+{% block title %}Acronym{% endblock %}
+
+{% block content %}
+    <h1>Acronym</h1>
+    <p>Acronym is a short form of a word or phrase. It is formed by taking the first letter of each word.</p>
+    <p>For example, <em>HTML</em> is an acronym for <em>HyperText Markup Language</em>.</p>
+
+    {{acronyms|length}} acronyms are available.
+    <ul>
+        {% for acronym in acronyms %}
+            <li><a href="">{{acronym.acronym_name}}</a></li>
+        {% endfor %}
+    </ul>
+
+    {% comment %} <form action="{% url 'acronym:search' %}" method="get">
+        <input type="text" name="q" placeholder="Search Acronym">
+        <input type="submit" value="Search">
+    </form> {% endcomment %}
+{% endblock %}
+
+
+

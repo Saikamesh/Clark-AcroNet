@@ -34,7 +34,7 @@ class Suggestions(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     suggested_by_name = models.CharField(null=True, max_length=50)
     suggested_by_email = models.EmailField(null=True, max_length=50)
-    status = models.CharField(max_length=10, choices=[('approved','Approved'),('rejected','Rejected'),('pending','Pending')], default='pending')
+    status = models.CharField(default='pending', max_length=10, choices=[('approved','Approved'),('rejected','Rejected'),('pending','Pending')])
 
     def __str__(self):
           return f"{self.acronym_name} - {self.full_form}"

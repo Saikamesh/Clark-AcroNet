@@ -12,5 +12,6 @@ urlpatterns = [
     # path("update/<str:name>/", views.update_acronym, name="update_acronym"),
     path("update", views.update_acronym, name="update_acronym"),
     path("delete/<str:name>/", views.delete_acronym, name="delete_acronym"),
-    path("suggestions", views.get_suggestions, name="get_suggestions")
+    path("suggestions", views.get_suggestions, name="get_suggestions"),
+    path("suggest", views.give_suggestion, name="give_suggestion")
 ]

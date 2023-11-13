@@ -113,7 +113,12 @@ def user_login(request):
         request.session['user_id'] = user.id
         request.session['email'] = user.email
         request.session['is_logged_in'] = True
-        return Response({"message": "You have been logged in."}, status=200)
+        return Response({
+            "message": "You have been logged in.",
+            "user_name": user.user_name,
+            "user_id": user.id,
+            "email": user.email,
+        }, status=200)
     except Users.DoesNotExist:
         return Response({"error": "Invalid credentials"}, status=400)
 

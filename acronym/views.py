@@ -56,6 +56,31 @@ def give_suggestion(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
+@api_view(["PUT"])
+def update_suggestion(request):
+    try:
+        acronym_name = request.data.get('acronym_name')
+        suggested_acronym = Suggestions.objects.get(acronym_name__iexact=acronym_name)
+        serializer = SuggestionsSerializer(suggested_acronym, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    except Suggestions.DoesNotExist:
+        return Response({"error": f"Acronym with name '{acronym_name}' does not exist."}, status=404)
+
+# Delete an existing suggested acronym from the database
+@api_view(["DELETE"])
+def delete_suggestion(request, acronym):
+    try:
+        acronym = Suggestions.objects.get(acronym_name__iexact=acronym)
+        acronym.delete()
+        suggestions = Suggestions.objects.all()
+        serializeredUsers = SuggestionsSerializer(suggestions, many=True)
+        return Response(serializeredUsers.data, status=201)
+    except Acronym.DoesNotExist:
+        return Response({"error": f"Acronym with name '{acronym}' does not exist."}, status=404)
+
 # Update an existing acronym in the database
 @api_view(["PUT"])
 def update_acronym(request):
@@ -76,10 +101,12 @@ def delete_acronym(request, name):
     try:
         acronym = Acronym.objects.get(acronym_name__iexact=name)
         acronym.delete()
-        return Response({"message": f"Acronym '{name}' has been deleted."}, status=204)
+        acronyms = Acronym.objects.all()
+        serializer = AcronymSerializer(acronyms, many=True)
+        return Response(serializer.data, status=200)
     except Acronym.DoesNotExist:
         return Response({"error": f"Acronym with name '{name}' does not exist."}, status=404)
-    
+
 @api_view(["POST"])
 def user_signup(request):
     username = request.data.get('user_name')
@@ -98,6 +125,40 @@ def user_signup(request):
         serializer = UsersSerializer(user)
         return Response(serializer.data, status=201)
 
+@api_view(["GET"])
+def get_all_users(request):
+    try:
+        users = Users.objects.all()
+        serializeredUsers = UsersSerializer(users, many=True)
+        return Response(serializeredUsers.data, status=201)
+    except Users.DoesNotExist:
+        return Response({"error": "No users found."}, status=404)
+    
+# Delete an existing user from the database
+@api_view(["DELETE"])
+def delete_user(request, email):
+    try:
+        user = Users.objects.get(Q(email=email))
+        user.delete()
+        users = Users.objects.all()
+        serializeredUsers = UsersSerializer(users, many=True)
+        return Response(serializeredUsers.data, status=201)
+    except Users.DoesNotExist:
+        return Response({"error": f"User with email '{email}' does not exist."}, status=404)
+    
+# Update an existing acronym in the database
+@api_view(["PUT"])
+def update_User(request):
+    try:
+        email = request.data.get('email')
+        user = Users.objects.get(Q(email=email))
+        serializer = UsersSerializer(user, data=request.data)
+        if serializer.is_valid(): 
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    except Acronym.DoesNotExist:
+        return Response({"error": f"Acronym with name '{email}' does not exist."}, status=404)
 
 @api_view(["POST"])
 def user_login(request):
@@ -118,6 +179,7 @@ def user_login(request):
             "user_name": user.user_name,
             "user_id": user.id,
             "email": user.email,
+            "user_type": user.user_type
         }, status=200)
     except Users.DoesNotExist:
         return Response({"error": "Invalid credentials"}, status=400)

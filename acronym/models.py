@@ -16,7 +16,7 @@ class Acronym(models.Model):
 
 class Users(models.Model):
      user_name = models.CharField(max_length=50)
-     user_type = user_type = models.CharField(max_length=10, choices=[('admin', 'Admin'), ('user', 'User')])
+     user_type = user_type = models.CharField(max_length=10, choices=[('admin', 'Admin'), ('user', 'User'), ('su', 'Super_User')])
      email = models.EmailField(max_length=50)
      password = models.CharField(max_length=50)
      

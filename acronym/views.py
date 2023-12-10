@@ -29,14 +29,14 @@ def acronyms_detail(request, name):
         serializer = AcronymSerializer(acronym, many=False)
         return Response(serializer.data)
     except Acronym.DoesNotExist:
-        return Response({"error": f"Acronym with name '{name}' does not exist."}, status=404)
+        return Response({f"Acronym with name '{name}' does not exist."}, status=404)
         
 # Add a new acronym to the database
 @api_view(["POST"])
 def add_acronym(request):
     acronym_name = request.data.get('acronym_name')
     if Acronym.objects.filter(acronym_name__iexact=acronym_name).exists():
-        return Response({"error": f"Acronym with name '{acronym_name}' already exists."}, status=400)
+        return Response({f"Acronym with name '{acronym_name}' already exists."}, status=400)
     serializer = AcronymSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -47,9 +47,9 @@ def add_acronym(request):
 def give_suggestion(request):
     acronym_name = request.data.get('acronym_name')
     if Acronym.objects.filter(acronym_name__iexact=acronym_name).exists():
-        return Response({"error": f"Acronym with name '{acronym_name}' already exists."}, status=400)
+        return Response({f"Acronym with name '{acronym_name}' already exists."}, status=400)
     if Suggestions.objects.filter(acronym_name__iexact=acronym_name).exists():
-        return Response({"error": f"Acronym with name '{acronym_name}' already suggested and is being Reviewed."}, status=400)
+        return Response({f"Acronym with name '{acronym_name}' already suggested and is being Reviewed."}, status=400)
     serializer = SuggestionsSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -67,7 +67,7 @@ def update_suggestion(request):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
     except Suggestions.DoesNotExist:
-        return Response({"error": f"Acronym with name '{acronym_name}' does not exist."}, status=404)
+        return Response({f"Acronym with name '{acronym_name}' does not exist."}, status=404)
 
 # Delete an existing suggested acronym from the database
 @api_view(["DELETE"])
@@ -79,7 +79,7 @@ def delete_suggestion(request, acronym):
         serializeredUsers = SuggestionsSerializer(suggestions, many=True)
         return Response(serializeredUsers.data, status=201)
     except Acronym.DoesNotExist:
-        return Response({"error": f"Acronym with name '{acronym}' does not exist."}, status=404)
+        return Response({f"Acronym with name '{acronym}' does not exist."}, status=404)
 
 # Update an existing acronym in the database
 @api_view(["PUT"])
@@ -93,7 +93,7 @@ def update_acronym(request):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
     except Acronym.DoesNotExist:
-        return Response({"error": f"Acronym with name '{name}' does not exist."}, status=404)
+        return Response({f"Acronym with name '{name}' does not exist."}, status=404)
 
 # Delete an existing acronym from the database
 @api_view(["DELETE"])
@@ -105,7 +105,7 @@ def delete_acronym(request, name):
         serializer = AcronymSerializer(acronyms, many=True)
         return Response(serializer.data, status=200)
     except Acronym.DoesNotExist:
-        return Response({"error": f"Acronym with name '{name}' does not exist."}, status=404)
+        return Response({f"Acronym with name '{name}' does not exist."}, status=404)
 
 @api_view(["POST"])
 def user_signup(request):
@@ -115,11 +115,11 @@ def user_signup(request):
     user_type = request.data.get('user_type')
 
     if not username or not email or not password or not user_type:
-        return Response({"error": "All fields are required."}, status=400)
+        return Response({"All fields are required."}, status=400)
 
     try:
         user = Users.objects.get(Q(user_name=username) | Q(email=email))
-        return Response({"error": "Username or email already exists."}, status=400)
+        return Response({"Username or email already exists."}, status=400)
     except Users.DoesNotExist:
         user = Users.objects.create(user_name=username, email=email, password=password, user_type = user_type)
         serializer = UsersSerializer(user)
@@ -132,7 +132,7 @@ def get_all_users(request):
         serializeredUsers = UsersSerializer(users, many=True)
         return Response(serializeredUsers.data, status=201)
     except Users.DoesNotExist:
-        return Response({"error": "No users found."}, status=404)
+        return Response({"No users found."}, status=404)
     
 # Delete an existing user from the database
 @api_view(["DELETE"])
@@ -144,7 +144,7 @@ def delete_user(request, email):
         serializeredUsers = UsersSerializer(users, many=True)
         return Response(serializeredUsers.data, status=201)
     except Users.DoesNotExist:
-        return Response({"error": f"User with email '{email}' does not exist."}, status=404)
+        return Response({f"User with email '{email}' does not exist."}, status=404)
     
 # Update an existing acronym in the database
 @api_view(["PUT"])
@@ -158,7 +158,7 @@ def update_User(request):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
     except Acronym.DoesNotExist:
-        return Response({"error": f"Acronym with name '{email}' does not exist."}, status=404)
+        return Response({f"Acronym with name '{email}' does not exist."}, status=404)
 
 @api_view(["POST"])
 def user_login(request):
@@ -166,7 +166,7 @@ def user_login(request):
     password = request.data.get("password")
 
     if not username or not password:
-        return Response({"error": "Both username and password are required."}, status=400)
+        return Response({"Both username and password are required."}, status=400)
     
     try:
         user = Users.objects.get(user_name=username , password=password)
@@ -182,7 +182,7 @@ def user_login(request):
             "user_type": user.user_type
         }, status=200)
     except Users.DoesNotExist:
-        return Response({"error": "Invalid credentials"}, status=400)
+        return Response({"Invalid credentials"}, status=400)
 
 
 @api_view(["POST"])

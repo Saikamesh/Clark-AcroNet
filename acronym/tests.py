@@ -7,7 +7,7 @@ from .models import Acronym, Suggestions, Users
 class AcronymModelTestCase(TestCase):
     def setUp(self):
         self.acronym1 = Acronym.objects.create(acronym_name='HTTP', full_form='Hypertext Transfer Protocol', description='A protocol for transferring data over the web', location='USA', phone_number='1234567890', email='http@example.com', website='http://www.example.com')
-        self.acronym2 = Acronym.objects.create(acronym_name='API', full_form='Application Programming Interface', description='A set of protocols and tools for building software applications', location='Canada', phone_number='0987654321', email='api@example.com', website='http://www.example.com')
+        self.acronym2 = Acronym.objects.create(acronym_name='API', full_form='Application Programming Interface', description='A set of protocols and tools for building software applications', location='Canada', phone_number='7987654321', email='api@example.com', website='http://www.example.com')
     
     def test_acronym_name(self):
         self.assertEqual(str(self.acronym1), 'HTTP - Hypertext Transfer Protocol')
@@ -27,7 +27,7 @@ class AcronymModelTestCase(TestCase):
     
     def test_acronym_phone_number(self):
         self.assertEqual(self.acronym1.phone_number, '1234567890')
-        self.assertEqual(self.acronym2.phone_number, '0987654321')
+        self.assertEqual(self.acronym2.phone_number, '7987654321')
     
     def test_acronym_email(self):
         self.assertEqual(self.acronym1.email, 'http@example.com')
@@ -85,7 +85,7 @@ class SuggestionsModelTestCase(TestCase):
     
     def test_suggestion_phone_number(self):
         self.assertEqual(self.suggestion1.phone_number, 1234567890)
-        self.assertEqual(self.suggestion2.phone_number, 987654321)
+        self.assertEqual(self.suggestion2.phone_number, 9876543218)
     
     def test_suggestion_email(self):
         self.assertEqual(self.suggestion1.email, 'http@example.com')
